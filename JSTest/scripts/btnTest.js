@@ -15,12 +15,43 @@
 
 // How to load in modules
 const Scene = require('Scene');
+const Materials = require('Materials');
+const Diagnostics = require('Diagnostics');
+const TouchGestures = require('TouchGestures');
 
-// Use export keyword to make a symbol available in scripting debug console
-export const Diagnostics = require('Diagnostics');
+
 
 // Enables async/await in JS [part 1]
 (async function() {
+    var myBtn = Scene.root.findFirst('plane0');
+
+    // TouchGestures.onTap(myBtn).subscribe((gesture) => {
+    //         //do stuff here
+    //         Diagnostics.log("Hello World");
+    //     }
+    // );
+
+    const [plane, material, material2] = await Promise.all([
+        Scene.root.findFirst('plane0'),
+        Materials.findFirst('testBtn'),
+        Materials.findFirst('testMat')
+    ]);
+    var isFirstMaterialSelected = true;
+
+    // Subscribe to tap gestures on the plane
+    TouchGestures.onTap(plane).subscribe(function(gesture){
+        // Log a string message  
+        Diagnostics.log('A console message logged from the script');    
+        // Switch materials depending on which one is currently applied to the plane
+        if (isFirstMaterialSelected) {
+            plane.material = material2;
+            isFirstMaterialSelected = false;
+        } else {
+            plane.material = material;
+            isFirstMaterialSelected = true;
+        }
+    })
+
 
 // To use variables and functions across files, use export/import keyword
 // export const animationDuration = 10;
