@@ -23,13 +23,13 @@ const TouchGestures = require('TouchGestures');
 
 // Enables async/await in JS [part 1]
 (async function() {
-    var myBtn = Scene.root.findFirst('plane0');
+    var myBtn = Scene.root.findFirst('testBtn');
 
-    // TouchGestures.onTap(myBtn).subscribe((gesture) => {
-    //         //do stuff here
-    //         Diagnostics.log("Hello World");
-    //     }
-    // );
+    TouchGestures.onTap(myBtn).subscribe((gesture) => {
+            //do stuff here
+            Diagnostics.log("Hello World");
+        }
+    );
 
     const [plane, material, material2] = await Promise.all([
         Scene.root.findFirst('plane0'),
@@ -41,7 +41,7 @@ const TouchGestures = require('TouchGestures');
     // Subscribe to tap gestures on the plane
     TouchGestures.onTap(plane).subscribe(function(gesture){
         // Log a string message  
-        Diagnostics.log('A console message logged from the script');    
+        Diagnostics.log('Change Material');    
         // Switch materials depending on which one is currently applied to the plane
         if (isFirstMaterialSelected) {
             plane.material = material2;
