@@ -64,3 +64,6 @@ crashlytics-build.properties
 # After Effect auto-save and logs
 /aep/Adobe After Effects Auto-Save
 /aep/hud_linearKey.aep Logs
+
+# Spark AR backup file
+*.arprojbk
