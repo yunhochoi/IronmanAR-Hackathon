@@ -20,32 +20,66 @@ const Diagnostics = require('Diagnostics');
 const TouchGestures = require('TouchGestures');
 
 
-
 // Enables async/await in JS [part 1]
 (async function() {
-    var btn_ironman_fire = Scene.root.findFirst('btn_ironman_fire');
+    // var btn_ironman_fire = Scene.root.findFirst('btn_ironman_fire');
     var isFirstMaterialSelected = true;
 
-    TouchGestures.onTap(btn_ironman_fire).subscribe((gesture) => {
-            
-        //do stuff here
-
-        if (isFirstMaterialSelected) {
-            Diagnostics.log("fire")
-            isFirstMaterialSelected = false;
-
-        } else {
-            Diagnostics.log("hold on")
-            isFirstMaterialSelected = true;
-        }
-    });
-
-    const [button, material] = await Promise.all([
-        Scene.root.findFirst('Mball'),
-        Materials.findFirst('DefaultMaterial')
-        // Materials.findFirst('testMat')
-    ]);
     
+    const [btn_ironman_fire, laser_beam, laser_hitwave] = await Promise.all([
+        Scene.root.findFirst('btn_ironman_fire'),
+        Scene.root.findFirst('laser_beam'),
+        // Materials.findFirst('DefaultMaterial'),
+        Scene.root.findFirst('emitter_beam')
+    ]);
+
+    laser_hitwave.material.opacity = 0;
+    laser_beam.material.opacity = 0;
+
+    //==============================================================================
+    // Make the plane's material transparent when the plane is long pressed
+    //==============================================================================
+
+    // Subscribe to long press gestures on the plane
+    TouchGestures.onLongPress(btn_ironman_fire).subscribe((gesture) => {
+
+        // Set the opacity to 50%
+        laser_hitwave.material.opacity = 1.0;
+        laser_beam.material.opacity = 1.0;
+
+        // Subscribe to the state of the gesture
+        gesture.state.monitor().subscribe((state) => {
+
+        // Return the opacity to 100% when the gesture ends
+        if (state.newValue !== 'BEGAN' && state.newValue !== 'CHANGED') {
+            laser_hitwave.material.opacity = 0;
+            laser_beam.material.opacity = 0;
+        }
+
+        });
+
+    });
+        
+    // material_laserbeam.opacity = 0.0;
+    // material_emitterbeam.opacity = 0.0;
+
+    // TouchGestures.onTap(btn_ironman_fire).subscribe((gesture) => {
+            
+    //     //do stuff here
+
+    //     if (isFirstMaterialSelected) {
+    //         Diagnostics.log("fire")
+    //         isFirstMaterialSelected = false;
+    //         material_laserbeam.opacity = 1.0;
+    //         material_emitterbeam.opacity = 1.0;
+
+    //     } else {
+    //         Diagnostics.log("hold")
+    //         isFirstMaterialSelected = true;
+    //         material_laserbeam.opacity = 0.0;
+    //         material_emitterbeam.opacity = 0.0;
+    //     }
+    // });
 
     // Subscribe to tap gestures on the plane
     // TouchGestures.onTap(plane).subscribe(function(gesture){
