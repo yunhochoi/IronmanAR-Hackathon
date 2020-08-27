@@ -26,34 +26,34 @@ const TouchGestures = require('TouchGestures');
     var isFirstMaterialSelected = true;
 
     
-    const [btn_ironman_fire, laser_beam, laser_hitwave] = await Promise.all([
-        Scene.root.findFirst('btn_ironman_fire'),
-        Scene.root.findFirst('laser_beam'),
-        // Materials.findFirst('DefaultMaterial'),
-        Scene.root.findFirst('emitter_beam')
+    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle] = await Promise.all([
+        Scene.root.findFirst('btn_laserFire'),
+        Scene.root.findFirst('mesh_laserBeam'),
+        Scene.root.findFirst('emitter_laserParticle')
     ]);
 
-    laser_hitwave.material.opacity = 0;
-    laser_beam.material.opacity = 0;
+    mesh_laserBeam.material.opacity = 0;
+    emitter_laserParticle.material.opacity = 0;
 
     //==============================================================================
     // Make the plane's material transparent when the plane is long pressed
     //==============================================================================
 
     // Subscribe to long press gestures on the plane
-    TouchGestures.onLongPress(btn_ironman_fire).subscribe((gesture) => {
+    TouchGestures.onLongPress(btn_laserFire).subscribe((gesture) => {
+        Diagnostics.log("long press");
 
         // Set the opacity to 50%
-        laser_hitwave.material.opacity = 1.0;
-        laser_beam.material.opacity = 1.0;
+        mesh_laserBeam.material.opacity = 1.0;
+        emitter_laserParticle.material.opacity = 1.0;
 
         // Subscribe to the state of the gesture
         gesture.state.monitor().subscribe((state) => {
 
         // Return the opacity to 100% when the gesture ends
         if (state.newValue !== 'BEGAN' && state.newValue !== 'CHANGED') {
-            laser_hitwave.material.opacity = 0;
-            laser_beam.material.opacity = 0;
+            mesh_laserBeam.material.opacity = 0;
+            emitter_laserParticle.material.opacity = 0;
         }
 
         });
