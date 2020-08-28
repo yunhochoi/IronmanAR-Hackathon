@@ -15,6 +15,7 @@
 
 // How to load in modules
 const Scene = require('Scene');
+const Patches = require('Patches');
 const Materials = require('Materials');
 const Diagnostics = require('Diagnostics');
 const TouchGestures = require('TouchGestures');
@@ -22,9 +23,6 @@ const TouchGestures = require('TouchGestures');
 
 // Enables async/await in JS [part 1]
 (async function() {
-    // var btn_ironman_fire = Scene.root.findFirst('btn_ironman_fire');
-    var isFirstMaterialSelected = true;
-
     
     const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial] = await Promise.all([
         Scene.root.findFirst('btn_laserFire'),
@@ -33,10 +31,13 @@ const TouchGestures = require('TouchGestures');
         Materials.findFirst('faceMaterial')
     ]);
 
+    // initial setting
     mesh_laserBeam.material.opacity = 0;
     emitter_laserParticle.material.opacity = 0;
     faceMaterial.opacity = 0;
 
+    // To patch editor
+    const skull_visible = false;
 
     //==============================================================================
     // Make the plane's material transparent when the plane is long pressed
@@ -44,12 +45,16 @@ const TouchGestures = require('TouchGestures');
 
     // Subscribe to long press gestures on the plane
     TouchGestures.onLongPress(btn_laserFire).subscribe((gesture) => {
-        Diagnostics.log("long press");
+        Diagnostics.log("long pressed");
 
         // Shoot Laser: Set the opacity to 100%
         mesh_laserBeam.material.opacity = 1.0;
         emitter_laserParticle.material.opacity = 1.0;
         faceMaterial.opacity = 1.0;
+
+        // Send the boolean value to the Patch Editor under the name 'myBoolean'
+        const skull_visible = true;
+        Patches.inputs.setBoolean('skull_visible', skull_visible);
 
         // Subscribe to the state of the gesture
         gesture.state.monitor().subscribe((state) => {
@@ -59,6 +64,8 @@ const TouchGestures = require('TouchGestures');
                 mesh_laserBeam.material.opacity = 0;
                 emitter_laserParticle.material.opacity = 0;
                 faceMaterial.opacity = 0;
+                const skull_visible = false;
+                Patches.inputs.setBoolean('skull_visible', skull_visible);
             }
 
         });
