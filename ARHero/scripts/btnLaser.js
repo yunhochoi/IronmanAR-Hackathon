@@ -26,17 +26,16 @@ const TouchGestures = require('TouchGestures');
     var isFirstMaterialSelected = true;
 
     
-    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMesh_targerUser, targetFace] = await Promise.all([
+    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial] = await Promise.all([
         Scene.root.findFirst('btn_laserFire'),
         Scene.root.findFirst('mesh_laserBeam'),
         Scene.root.findFirst('emitter_laserParticle'),
-        Scene.root.findFirst('faceMesh_targerUser'),
-        Materials.findFirst('targetFace')
+        Materials.findFirst('faceMaterial')
     ]);
 
     mesh_laserBeam.material.opacity = 0;
     emitter_laserParticle.material.opacity = 0;
-    targetFace.opacity = 0;
+    faceMaterial.opacity = 0;
 
 
     //==============================================================================
@@ -50,7 +49,7 @@ const TouchGestures = require('TouchGestures');
         // Shoot Laser: Set the opacity to 100%
         mesh_laserBeam.material.opacity = 1.0;
         emitter_laserParticle.material.opacity = 1.0;
-        targetFace.opacity = 1.0;
+        faceMaterial.opacity = 1.0;
 
         // Subscribe to the state of the gesture
         gesture.state.monitor().subscribe((state) => {
@@ -59,7 +58,7 @@ const TouchGestures = require('TouchGestures');
             if (state.newValue !== 'BEGAN' && state.newValue !== 'CHANGED') {
                 mesh_laserBeam.material.opacity = 0;
                 emitter_laserParticle.material.opacity = 0;
-                targetFace.opacity = 0;
+                faceMaterial.opacity = 0;
             }
 
         });
