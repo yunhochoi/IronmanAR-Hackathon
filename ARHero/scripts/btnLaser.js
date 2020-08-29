@@ -24,15 +24,17 @@ const TouchGestures = require('TouchGestures');
 // Enables async/await in JS [part 1]
 (async function() {
     
-    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial] = await Promise.all([
+    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial, skull] = await Promise.all([
         Scene.root.findFirst('btn_laserFire'),
         Scene.root.findFirst('mesh_laserBeam'),
         Scene.root.findFirst('emitter_laserParticle'),
-        Materials.findFirst('faceMaterial')
+        Materials.findFirst('faceMaterial'),
+        Scene.root.findFirst('skull')
     ]);
 
     // initial setting
     mesh_laserBeam.material.opacity = 0;
+    // skull.material.opacity = 0.5;
     emitter_laserParticle.material.opacity = 0;
 
     // To patch editor
