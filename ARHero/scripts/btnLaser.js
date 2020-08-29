@@ -24,17 +24,18 @@ const TouchGestures = require('TouchGestures');
 // Enables async/await in JS [part 1]
 (async function() {
     
-    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial] = await Promise.all([
+    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial, skull] = await Promise.all([
         Scene.root.findFirst('btn_laserFire'),
         Scene.root.findFirst('mesh_laserBeam'),
         Scene.root.findFirst('emitter_laserParticle'),
-        Materials.findFirst('faceMaterial')
+        Materials.findFirst('faceMaterial'),
+        Scene.root.findFirst('skull')
     ]);
 
     // initial setting
     mesh_laserBeam.material.opacity = 0;
+    // skull.material.opacity = 0.5;
     emitter_laserParticle.material.opacity = 0;
-    // faceMaterial.opacity = 0;
 
     // To patch editor
     const skull_visible = false;
@@ -50,7 +51,6 @@ const TouchGestures = require('TouchGestures');
         // Shoot Laser: Set the opacity to 100%
         mesh_laserBeam.material.opacity = 1.0;
         emitter_laserParticle.material.opacity = 1.0;
-        // faceMaterial.opacity = 1.0;
 
         // Send the boolean value to the Patch Editor under the name 'myBoolean'
         const skull_visible = true;
@@ -63,7 +63,6 @@ const TouchGestures = require('TouchGestures');
             if (state.newValue !== 'BEGAN' && state.newValue !== 'CHANGED') {
                 mesh_laserBeam.material.opacity = 0;
                 emitter_laserParticle.material.opacity = 0;
-                // faceMaterial.opacity = 0;
                 const skull_visible = false;
                 Patches.inputs.setBoolean('skull_visible', skull_visible);
             }
