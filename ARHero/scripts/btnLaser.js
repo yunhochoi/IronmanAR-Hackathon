@@ -24,18 +24,19 @@ const TouchGestures = require('TouchGestures');
 // Enables async/await in JS [part 1]
 (async function() {
     
-    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial, skull] = await Promise.all([
+    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial, skull, isLaserActivated] = await Promise.all([
         Scene.root.findFirst('btn_laserFire'),
         Scene.root.findFirst('mesh_laserBeam'),
         Scene.root.findFirst('emitter_laserParticle'),
         Materials.findFirst('faceMaterial'),
-        Scene.root.findFirst('skull')
+        Scene.root.findFirst('skull'),
+        Patches.getBooleanValue('isLaserActivated')
     ]);
 
     // initial setting
-    mesh_laserBeam.material.opacity = 0;
+    mesh_laserBeam.material.opacity = 1.0;
     // skull.material.opacity = 0.5;
-    emitter_laserParticle.material.opacity = 0;
+    emitter_laserParticle.material.opacity = 1.0;
 
     // To patch editor
     const skull_visible = false;
@@ -43,6 +44,10 @@ const TouchGestures = require('TouchGestures');
     //==============================================================================
     // Make the plane's material transparent when the plane is long pressed
     //==============================================================================
+
+    if (isLaserActivated){
+        Diagnostics.log("screen touch")
+    }
 
     // Subscribe to long press gestures on the plane
     TouchGestures.onLongPress(btn_laserFire).subscribe((gesture) => {
