@@ -19,18 +19,18 @@ const Patches = require('Patches');
 const Materials = require('Materials');
 const Diagnostics = require('Diagnostics');
 const TouchGestures = require('TouchGestures');
+const Instruction = require('Instruction');
+const FaceTracking = require('FaceTracking');
 
 
 // Enables async/await in JS [part 1]
 (async function() {
     
-    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial, skull, isLaserActivated] = await Promise.all([
+    const [btn_laserFire, mesh_laserBeam, emitter_laserParticle, faceMaterial] = await Promise.all([
         Scene.root.findFirst('btn_laserFire'),
         Scene.root.findFirst('mesh_laserBeam'),
         Scene.root.findFirst('emitter_laserParticle'),
-        Materials.findFirst('faceMaterial'),
-        Scene.root.findFirst('skull'),
-        Patches.getBooleanValue('isLaserActivated')
+        Materials.findFirst('faceMaterial')
     ]);
 
     // initial setting
@@ -39,15 +39,20 @@ const TouchGestures = require('TouchGestures');
     emitter_laserParticle.material.opacity = 1.0;
 
     // To patch editor
-    const skull_visible = false;
+    const long_pressed = false;
+
+    // const face = FaceTracking.face(0);
+
+    // Define a boolean that will be true until 2 faces are detected
+    // var show = FaceTracking.count.lt(1);
+
+    // Bind the visibility of the instruction to the boolean
+    // Instruction.bind(face, 'find_face');
 
     //==============================================================================
     // Make the plane's material transparent when the plane is long pressed
     //==============================================================================
 
-    if (isLaserActivated){
-        Diagnostics.log("screen touch")
-    }
 
     // Subscribe to long press gestures on the plane
     TouchGestures.onLongPress(btn_laserFire).subscribe((gesture) => {
@@ -58,8 +63,7 @@ const TouchGestures = require('TouchGestures');
         emitter_laserParticle.material.opacity = 1.0;
 
         // Send the boolean value to the Patch Editor under the name 'myBoolean'
-        const skull_visible = true;
-        Patches.inputs.setBoolean('skull_visible', skull_visible);
+        const long_pressed = true;
 
         // Subscribe to the state of the gesture
         gesture.state.monitor().subscribe((state) => {
@@ -68,8 +72,6 @@ const TouchGestures = require('TouchGestures');
             if (state.newValue !== 'BEGAN' && state.newValue !== 'CHANGED') {
                 mesh_laserBeam.material.opacity = 0;
                 emitter_laserParticle.material.opacity = 0;
-                const skull_visible = false;
-                Patches.inputs.setBoolean('skull_visible', skull_visible);
             }
 
         });
